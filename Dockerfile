@@ -42,7 +42,7 @@ RUN wget -q -O source_ffmpeg.tar.bz2 "https://ffmpeg.org/releases/ffmpeg-${FFMPE
     --disable-decoders \
     --disable-encoders \
     --disable-muxers \
-    --disable-filters \ 
+    --disable-filters \
     --disable-postproc \
     --disable-bsfs \
     --disable-protocols \
@@ -60,14 +60,29 @@ RUN wget -q -O source_ffmpeg.tar.bz2 "https://ffmpeg.org/releases/ffmpeg-${FFMPE
 
 FROM alpine:3.12
 
-RUN apk add -q --no-cache bash
+RUN apk add -q --no-cache bash npm
 
 COPY --from=builder "/ffmpeg_bins" "/usr/bin/"
+#Scripts
+COPY "extractForcedSubtitles.sh" "/extractForcedSubtitles.sh"
+COPY "start.sh" "/start.sh"
+#NodeJS
+COPY "package.json" "/package.json"
+COPY "package-lock.json" "/package-lock.json"
+COPY "server.js" "/server.js"
+COPY "pm2.json" "/pm2.json"
+#crontabs for root user
+COPY "cronjobs" "/etc/crontabs/root"
 
-COPY "BatchExtractSubtitles.sh" "/docker-entrypoint.sh"
-COPY "TestExtractSubtitles.sh" "/docker-test-entrypoint.sh"
+RUN npm ci --production
+
+ARG NODE_ENV=production
+ENV NODE_ENV ${NODE_ENV}
 
 VOLUME "/data"
+VOLUME "/db"
 WORKDIR "/data"
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+EXPOSE 3000
+
+ENTRYPOINT ["/start.sh"]

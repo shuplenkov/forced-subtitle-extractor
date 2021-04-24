@@ -1,50 +1,12 @@
-# Subtitle Extractor
+# Forced subtitle Extractor
 
-This extracts embedded subtitles & attachments of all **.mkv** files in the volume mounted to /data. They are extracted in a subfolder for each file.
+This script is based on [AmineI/SubtitleExtractor-Docker](https://github.com/AmineI/SubtitleExtractor-Docker)
 
-It works best as a Docker container hosted to provide subtitles & attachments in an automated fashion.
+It extracts subtitles, named as forced(or similar) and places them in the folder with videofile. It will help you if you have issues with plex which wants subtitles to have forced flag.
 
-The Docker image size is kept very small by using multi-stage build to compile minimal FFMPEG binaries from source.
+##### How to run
 
-Subtitles are saved as .ass files by default following a template, and attachments keep their original filename and extension.
-
-For each file `FileName.mkv`, its attachments & subtitles will be saved under `FileName/`, and the subtitles will be named `SubtitleName_SubtitleNumber_lang_FileName.OUT_EXT`, with OUT_EXT being 'ass' by default.
-
-#### Environment variables
-
-- `LANGS` allows to specify the languages to extract. Use their language codes, separated by a space, to extract only these. Defaults to extract all languages. Subtitles without language ('und') are always extracted.
-
-   example : ```LANGS=eng fre```
-
-- `OUT_EXT` defines the ouput extension of the subtitles files. Accepts any subtitle format supported by ffmpeg, and is properly converted from the input subtitle. Defaults to 'ass'.
-
-   example : ```OUT_EXT=srt```
-
-- `SUBFOLDER` If defined, all subtitles & attachments will be extracted in a subfolder of `SUBFOLDER` : In "SUBFOLDER/videofilename/", instead of only "videofilename/".
-
-   example : ```SUBFOLDER=subtitles```.
-
-### Usage Examples
-
-Mounting folders as volume, in a Linux environment (Run these from WSL2 if you are using this on Windows)
-
-##### Extract all subtitles & all attachments
-
-``` {bash}
-docker run --rm -it -v /AFolderWithMKVFiles:/data amine1u1/subtitleextractor
-```
-
-##### Extract subtitles of specific languages, & all attachments
-
-```{bash}
-docker run --rm -it -v /APathWithMKVFiles:/data -e 'LANGS=eng fre' amine1u1/subtitleextractor
-```
-
-##### Extract all subtitles to a specific extension (ffmpeg does any eventual conversion), & all attachments
-
-```{bash}
-docker run --rm -it -v /AFolderWithMKVFiles:/data -e 'OUT_EXT=srt' amine1u1/subtitleextractor
-```
+docker run -d --restart unless-stopped -v /volume1/Media/Movies:/data/Movies -v /volume1/Media/TV\ Show:/data/TV\ Show -v /volume1/Docker/forced-subtitles:/db -p 19191:3000 --name extract-forced-subtitles fuzz1986/extract-forced-subtitles
 
 ### Notes, credits & Licences
 Credits & thanks to the ffmpeg developer team.

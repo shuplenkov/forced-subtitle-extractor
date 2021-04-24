@@ -1,0 +1,64 @@
+#Sonarr Configuration
+sonarr:
+  server:
+    addr: 192.168.1.45
+    port: 18989
+    path: /
+    ssl: false
+  auth:
+    apikey: 26824600755d4f35afdc315a729a3820
+    username:
+    password:
+  search: true
+  seasonFolder: true
+  qualityProfileId: 1
+  excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
+    -
+
+#Radarr Configuration
+radarr:
+  server:
+    addr: 192.168.1.45
+    port : 17878 # Default is 7878
+    path: / # Default is / . If set, it must start and finish with / . Eg: /radarr/
+    ssl: false #default false
+  auth:
+    apikey: e1b943a467ff4f2e8103216cf5c4cf52
+    username:
+    password:
+  search: true
+  qualityProfileId: 1
+  excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
+    -
+
+#Telegram Configuration
+telegram:
+  token: 1721722195:AAFb0RaEFevGytIPxGe-rqdNvfCjwTJ5lKc
+  password: TheFuzz1235789!
+
+#Transmission Configuration
+transmission:
+  enable: false #enable the transmission commands
+  onlyAdmin: true #transmission commandwill only work for admins
+  host: # IP-adres of the Transmission service
+  authentication: true #is transmission protected with a password?
+  username:
+  password:
+
+# Optional settings:
+##Language
+language: en
+
+##Entrypoints
+entrypointAuth: auth #auth or a custom entrypoint
+entrypointHelp: help #help entrypoint
+entrypointAdd: start #start or a custom entrypoint
+entrypointAllSeries: allSeries #allSeries or a custom entrypoint
+entrypointTransmission: transmission #transmission or a custom entrypoint
+
+##Restrict some commands (Transmission) to only admins
+enableAdmin: true
+
+##Logging
+logToConsole: true
+debugLogging: false
