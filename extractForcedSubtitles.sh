@@ -3,7 +3,7 @@ set -e
 
 excludes_file="/db/.excluded"
 
-: ${OUT_EXT:="ass"} #Sets the default value if not specified
+: ${OUT_EXT:="srt"} #Sets the default value if not specified
 
 lc(){
     case "$1" in
